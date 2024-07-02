@@ -1,0 +1,2 @@
+--out: "minister-check"
+--outDir: "$projectdir/../../../../bin"
