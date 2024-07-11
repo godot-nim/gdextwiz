@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "la .panon."
-description   = "Integrates godot CLI and nimble to assist in the development of Nim-made godot games."
+description   = "CLI Godot&Nim game development assistant"
 license       = "MIT"
 srcDir        = "src"
 bin           = @["minister"]
