@@ -20,10 +20,10 @@ nimble uninstall -y godotgen
 nimble uninstall -y godotcore
 """
 
-proc install*(): 0..1 =
+proc install*(godotbin: string = "godot"): 0..1 =
   ## Install all dependencies to use godot.
   execShellCmd &"""
-godot --dump-extension-api
+{godotbin} --dump-extension-api
 nimble install {path.coronation}
 coronation --apisource:extension_api.json --outdir:. --package:godotgen
 nimble install {path.godotcore}
