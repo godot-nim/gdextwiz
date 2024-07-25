@@ -6,7 +6,7 @@ import sdk
 const path = (
   coronation: "https://github.com/godot-nim/coronation",
   godotcore: "https://github.com/godot-nim/godotcore",
-  godot: "file:///home/panno/.local/src/github.com/godot-nim/godot",
+  godot: "https://github.com/godot-nim/godot",
 )
 
 builtin_apps.add "library"
