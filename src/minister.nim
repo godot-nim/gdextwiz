@@ -1,5 +1,3 @@
-import cloths
-
 import std/os
 import std/tables
 
