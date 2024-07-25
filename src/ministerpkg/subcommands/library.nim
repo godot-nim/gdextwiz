@@ -25,9 +25,9 @@ proc install*(godotbin: string = "godot"): 0..1 =
   execShellCmd &"""
 {godotbin} --dump-extension-api
 nimble install {path.coronation}
-coronation --apisource:extension_api.json --outdir:. --package:godotgen
+coronation --apisource:extension_api.json --outdir:. --package:godotgen --version-control:off
 nimble install {path.godotcore}
-nimble install file://{getCurrentDir()}/godotgen
+cd godotgen && nimble install && cd -
 nimble install {path.godot}
 rm -rf godotgen extension_api.json
 """
