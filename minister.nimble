@@ -12,5 +12,4 @@ binDir        = "bin"
 # Dependencies
 
 requires "nim >= 2.0.0"
-requires "cloths >= 1.5.0"
 requires "cligen"
