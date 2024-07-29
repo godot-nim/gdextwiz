@@ -18,8 +18,8 @@ when isMainModule:
       if result.len > 0 and optionNormalize(result[0]) notin builtin_apps:
         let subcommand = cmdline[0]
         let args = cmdline[1..^1]
-        if findExe("minister-" & subcommand) != "":
-          quit execShellCmd("minister-" & subcommand & " " & args.join(" "))
+        if findExe("gdextwiz-" & subcommand) != "":
+          quit execShellCmd("gdextwiz-" & subcommand & " " & args.join(" "))
 
   dispatchmulti(
     [ "multi",
@@ -37,9 +37,9 @@ Run "$command {help SUBCMD|SUBCMD --help}" to see help for just SUBCMD.
 Run "$command help" to get *comprehensive* help.${ifVersion}
 
 Extention:
-  Place "minister_COMMAND" executable on valid path to extend the command.
-  For example, if "minister-launch" command is available on ~/.nimble/bin,
-  you can execute it with type "minister plugin launch" or "minister launch"."""
+  Place "gdextwiz_COMMAND" executable on valid path to extend the command.
+  For example, if "gdextwiz-launch" command is available on ~/.nimble/bin,
+  you can execute it with type "gdextwiz plugin launch" or "gdextwiz launch"."""
     ],
     [nimble.check],
     [library.install, help= library.HELP install],

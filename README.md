@@ -1,19 +1,19 @@
-# godot-nim/minister
+# godot-nim/gdextwiz
 
 CLI Godot&Nim game development assistant
 
 ## Install
 
 ```bash
-nimble install https://github.com/godot-nim/minister
+nimble install https://github.com/godot-nim/gdextwiz
 ```
 
 ## Commands
 
-### minister install
+### gdextwiz install
 
 Install all dependencies to use godot.
 
-### minister uninstall
+### gdextwiz uninstall
 
-Uninstall all dependencies that installed through minister.
+Uninstall all dependencies that installed through gdextwiz.

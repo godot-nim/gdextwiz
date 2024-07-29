@@ -1,1 +1,1 @@
---path: "ministerpkg"
+--path: "gdextwizpkg"

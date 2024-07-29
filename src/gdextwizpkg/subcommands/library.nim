@@ -12,7 +12,7 @@ const path = (
 builtin_apps.add "library"
 
 proc uninstall*(): 0..1 =
-  ## Uninstall all dependencies that installed through minister.
+  ## Uninstall all dependencies that installed through gdextwiz.
   execShellCmd &"""
 nimble uninstall -y coronation
 nimble uninstall -y gdext

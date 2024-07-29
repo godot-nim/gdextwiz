@@ -5,7 +5,7 @@ author        = "la .panon."
 description   = "CLI Godot&Nim game development assistant"
 license       = "MIT"
 srcDir        = "src"
-bin           = @["minister"]
+bin           = @["gdextwiz"]
 binDir        = "bin"
 
 
