@@ -1,8 +1,10 @@
 import std/os
 import std/tables
 
+import sdk/cligentypes
+
 import subcommands/library
-import subcommands/initialize
+import subcommands/workspace
 
 when isMainModule:
   import cligen
@@ -37,5 +39,5 @@ Extention:
     ],
     [library.install, help= library.HELP install],
     [library.uninstall, help= library.HELP uninstall],
-    [initialize.init],
+    [workspace.new_workspace],
   )
