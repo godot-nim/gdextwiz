@@ -7,5 +7,5 @@ import os
 --noMain: on
 --define: nimPreviewDotLikeOps
 
-switch("define", "projectName:" & projectName())
+switch("define", "projectName:" & projectDir().splitFile.name)
 switch("out", "$projectdir/lib"/("workspaceentry".toDll))
