@@ -1,15 +1,11 @@
 import std/os
 import std/strformat
 
-import sdk
-
 const path = (
   coronation: "https://github.com/godot-nim/coronation",
   gdextcore: "https://github.com/godot-nim/gdextcore",
   gdext: "https://github.com/godot-nim/gdextshell",
 )
-
-builtin_apps.add "library"
 
 proc uninstall*(): 0..1 =
   ## Uninstall all dependencies that installed through gdextwiz.

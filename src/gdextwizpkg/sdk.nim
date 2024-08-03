@@ -1,1 +1,0 @@
-var builtin_apps*: seq[string]
