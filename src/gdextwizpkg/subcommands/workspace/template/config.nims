@@ -10,3 +10,5 @@ when withDir(thisDir(), system.fileExists("bootstrapconf.nims")):
 
 # ===============================================================
 # Edit your workspace-local settings here
+
+--path: src
