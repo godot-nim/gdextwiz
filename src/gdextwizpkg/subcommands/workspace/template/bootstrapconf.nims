@@ -1,3 +1,6 @@
+## This file was copied from https://github.com/godot-nim/gdextwiz/blob/main/src/gdextwizpkg/subcommands/workspace/template
+## This file is used to build the extension.
+## Basically, there is no need to edit.
 import os
 
 --app: lib
@@ -5,4 +8,4 @@ import os
 --define: nimPreviewDotLikeOps
 
 switch("define", "projectName:" & projectName())
-switch("out", "lib"/("workspaceentry".toDll))
+switch("out", "$projectdir/lib"/("workspaceentry".toDll))

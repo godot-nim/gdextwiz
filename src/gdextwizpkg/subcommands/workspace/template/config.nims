@@ -7,3 +7,6 @@ when withDir(thisDir(), system.fileExists("nimble.paths")):
 when withDir(thisDir(), system.fileExists("bootstrapconf.nims")):
   include "bootstrapconf.nims"
 # end gdext spacification
+
+# ===============================================================
+# Edit your workspace-local settings here
