@@ -10,15 +10,28 @@ nimble install https://github.com/godot-nim/gdextwiz
 
 ## Commands
 
-### gdextwiz install
+### Library
 
-Install all dependencies to use godot.
+#### gdextwiz install
 
-### gdextwiz uninstall
+Install those gdext dependencies:
 
-Uninstall all dependencies that installed through gdextwiz.
+* [godot-nim/gdext-nim](https://github.com/godot-nim/gdext-nim)
+* [godot-nim/gdextwiz](https://github.com/godot-nim/gdextwiz)
+* [godot-nim/gdextgen](https://github.com/godot-nim/gdextgen)
+* [godot-nim/gdextcore](https://github.com/godot-nim/gdextcore)
 
-### gdextwiz new-workspace
+#### gdextwiz uninstall
+
+Uninstall all above
+
+#### gdextwiz upgrade
+
+shorthands for `gdextwiz uninstall; gdextwiz install`
+
+### Workspace
+
+#### gdextwiz new-workspace
 
 Generate a workspace template, run it in the same directory as project.godot and follow the wizard's directions.
 
