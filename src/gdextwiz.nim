@@ -1,44 +1,117 @@
 import std/os
-import std/tables
-
-import sdk/cligentypes
+import std/strutils
 
 import subcommands/library
 import subcommands/workspace
 
-when isMainModule:
-  import cligen
+import parseopt
 
-  proc mergeParams(cmdNames: seq[string]; cmdLine = commandLineParams()): seq[string] = #{.raises: [], tags: [], forbids: [].} =
-    result = cligen.mergeParams(cmdNames, cmdLine)
-    if cmdNames == @["multi"]:
-      let subcommand = cmdline[0]
-      let args = cmdline[1..^1]
-      if findExe("gdextwiz-" & subcommand) != "":
-        quit execShellCmd("gdextwiz-" & subcommand & " " & args.join(" "))
-
-  dispatchmulti(
-    [ "multi",
-      usage = """
-$command - CLI Godot&Nim game development assistant
+let help = """
+gdextwiz - CLI Godot&Nim game development assistant
 
 Usage:
-  $command {SUBCMD}  [sub-command options & parameters]
 
-where {SUBCMD} is one of:
-$subcmds
-$command {-h|--help} or with no args at all prints this message.
-$command --help-syntax gives general cligen syntax help.
-Run "$command {help SUBCMD|SUBCMD --help}" to see help for just SUBCMD.
-Run "$command help" to get *comprehensive* help.${ifVersion}
+  gdextwiz [subcmd]
+
+  subcmd:
+
+    # library
+    install
+      : Install all dependencies to develop Godot GDExtension.
+    uninstall
+      : Uninstall all dependencies that installed through gdextwiz.
+    upgrade
+      : Uninstall current implementation and re-install latest.
+
+    # workspace
+    new-workspace (<name>)
+      : Setup new workspace; then you could start development immediately.
+
+    # iteration
+    build (nim-option...) (<at=$PWD>)
+      : Search bootstrap.nim from <at> to '/' and compile it.
+      : If project.godot is found before bootstrap.nim,
+      : build-all is called instead.
+    build-all (nim-option...) (<at=$PWD>) (--depth:<depth=int.high>)
+      : Search project.godot from <at> to '/' and compile all
+      : bootstrap.nim under it.
+      : This search for compile may recursive up to <depth>
 
 Extention:
+
   Place "gdextwiz_COMMAND" executable on valid path to extend the command.
   For example, if "gdextwiz-launch" command is available on ~/.nimble/bin,
-  you can execute it with type "gdextwiz plugin launch" or "gdextwiz launch"."""
-    ],
-    [library.install, help= library.HELP install],
-    [library.uninstall, help= library.HELP uninstall],
-    [library.upgrade, help= library.HELP upgrade],
-    [workspace.new_workspace],
-  )
+  you can execute it with type "gdextwiz plugin launch" or "gdextwiz launch".
+"""
+
+
+proc optnormalize(str: string): string =
+  str.normalize.replace("-", "")
+
+proc reverseOpt(p: var OptParser): string =
+  case p.kind
+  of cmdLongOption:
+    if p.val.len == 0:
+      "--" & p.key & ":" & p.val
+    else:
+      "--" & p.key
+  of cmdShortOption:
+    if p.val.len == 0:
+      "-" & p.key & ":" & p.val
+    else:
+      "-" & p.key
+  of cmdArgument:
+    p.key
+  of cmdEnd:
+    ""
+
+proc err_invalidOpt(p: var OptParser) =
+  stderr.writeLine reverseOpt(p) & " is invalid."
+  stdout.writeLine help
+  quit 1
+
+proc dispatch_addon(opt: var OptParser) =
+  let subcmd = opt.key
+  next opt
+
+  var args: seq[string]
+  while opt.kind != cmdEnd:
+    args.add reverseOpt opt
+    next opt
+
+  if findExe("gdextwiz-" & subcmd) != "":
+    quit execShellCmd("gdextwiz-" & subcmd & " " & args.join(" "))
+  if findExe("gdextwiz_" & subcmd) != "":
+    quit execShellCmd("gdextwiz-" & subcmd & " " & args.join(" "))
+
+proc dispatch_subcmd(opt: var OptParser) =
+  while true:
+    case opt.kind
+    of cmdLongOption, cmdShortOption:
+      err_invalidOpt opt
+    of cmdArgument:
+      case opt.key.optnormalize
+      of "install":
+        dispatch_install(opt)
+      of "uninstall":
+        dispatch_uninstall(opt)
+      of "upgrade":
+        dispatch_upgrade(opt)
+      of "build":
+        discard
+      of "buildall":
+        discard
+      of "newworkspace":
+        dispatch_new_workspace(opt)
+      else:
+        dispatch_addon(opt)
+    of cmdEnd:
+      echo help
+      quit 0
+    next opt
+
+when isMainModule:
+  var opt = initOptParser()
+  next opt
+
+  dispatch_subcmd(opt)
