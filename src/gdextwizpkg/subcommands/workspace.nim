@@ -33,18 +33,13 @@ proc new_workspace*(name = default Directory): 0..1 =
   createDir workspace/"src"
 
 proc dispatch_new_workspace*(opt: var OptParser) =
+  next opt
   while true:
     case opt.kind
     of cmdLongOption, cmdShortOption:
       discard
-    of cmdArgument, cmdEnd:
-      break
+    of cmdArgument:
+      quit new_workspace(Directory opt.key)
+    of cmdEnd:
+      quit new_workspace()
     next opt
-
-  case opt.kind
-  of cmdLongOption, cmdShortOption:
-    discard
-  of cmdArgument:
-    quit new_workspace(Directory opt.key)
-  of cmdEnd:
-    quit new_workspace()
