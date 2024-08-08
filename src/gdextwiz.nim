@@ -6,6 +6,7 @@ import sdk/opttools
 
 import subcommands/library
 import subcommands/workspace
+import subcommands/iteration
 
 
 let help = """
@@ -83,9 +84,9 @@ proc dispatch_subcmd(opt: var OptParser) =
       of "upgrade":
         dispatch_upgrade(opt)
       of "build":
-        discard
+        dispatch_build(opt)
       of "buildall":
-        discard
+        dispatch_build_all(opt)
       of "newworkspace":
         dispatch_new_workspace(opt)
       else:
