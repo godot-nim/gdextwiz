@@ -1,10 +1,13 @@
 import std/os
 import std/strutils
+import std/parseopt
+
+import sdk/opttools
 
 import subcommands/library
 import subcommands/workspace
+import subcommands/iteration
 
-import parseopt
 
 let help = """
 gdextwiz - CLI Godot&Nim game development assistant
@@ -28,14 +31,16 @@ Usage:
       : Setup new workspace; then you could start development immediately.
 
     # iteration
-    build (nim-option...) (<at=$PWD>)
+    build-all (nim-option...) (<at=$PWD>) (--depth:<depth=1>)
+      : Search project.godot from <at> to '/' and compile all bootstrap.nim
+      : under it.
+      : Look for bootstrap.nim from project.godot recursive up to <depth>
+      : <depth> represents the depth relative to project.godot; 0 means same
+      :         dir as it.
+    build (nim-option...) (<at=$PWD>) (--depth:<depth=1>)
       : Search bootstrap.nim from <at> to '/' and compile it.
-      : If project.godot is found before bootstrap.nim,
-      : build-all is called instead.
-    build-all (nim-option...) (<at=$PWD>) (--depth:<depth=int.high>)
-      : Search project.godot from <at> to '/' and compile all
-      : bootstrap.nim under it.
-      : This search for compile may recursive up to <depth>
+      : If project.godot is found instead of bootstrap.nim, build-all is called.
+      : <depth> is used for this compatible mode.
 
 Extention:
 
@@ -47,23 +52,6 @@ Extention:
 
 proc optnormalize(str: string): string =
   str.normalize.replace("-", "")
-
-proc reverseOpt(p: var OptParser): string =
-  case p.kind
-  of cmdLongOption:
-    if p.val.len == 0:
-      "--" & p.key & ":" & p.val
-    else:
-      "--" & p.key
-  of cmdShortOption:
-    if p.val.len == 0:
-      "-" & p.key & ":" & p.val
-    else:
-      "-" & p.key
-  of cmdArgument:
-    p.key
-  of cmdEnd:
-    ""
 
 proc err_invalidOpt(p: var OptParser) =
   stderr.writeLine reverseOpt(p) & " is invalid."
@@ -98,9 +86,9 @@ proc dispatch_subcmd(opt: var OptParser) =
       of "upgrade":
         dispatch_upgrade(opt)
       of "build":
-        discard
+        dispatch_build(opt)
       of "buildall":
-        discard
+        dispatch_build_all(opt)
       of "newworkspace":
         dispatch_new_workspace(opt)
       else:
