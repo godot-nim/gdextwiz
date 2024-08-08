@@ -1,10 +1,12 @@
 import std/os
 import std/strutils
+import std/parseopt
+
+import sdk/opttools
 
 import subcommands/library
 import subcommands/workspace
 
-import parseopt
 
 let help = """
 gdextwiz - CLI Godot&Nim game development assistant
@@ -47,23 +49,6 @@ Extention:
 
 proc optnormalize(str: string): string =
   str.normalize.replace("-", "")
-
-proc reverseOpt(p: var OptParser): string =
-  case p.kind
-  of cmdLongOption:
-    if p.val.len == 0:
-      "--" & p.key & ":" & p.val
-    else:
-      "--" & p.key
-  of cmdShortOption:
-    if p.val.len == 0:
-      "-" & p.key & ":" & p.val
-    else:
-      "-" & p.key
-  of cmdArgument:
-    p.key
-  of cmdEnd:
-    ""
 
 proc err_invalidOpt(p: var OptParser) =
   stderr.writeLine reverseOpt(p) & " is invalid."
