@@ -31,14 +31,16 @@ Usage:
       : Setup new workspace; then you could start development immediately.
 
     # iteration
-    build (nim-option...) (<at=$PWD>)
+    build-all (nim-option...) (<at=$PWD>) (--depth:<depth=1>)
+      : Search project.godot from <at> to '/' and compile all bootstrap.nim
+      : under it.
+      : Look for bootstrap.nim from project.godot recursive up to <depth>
+      : <depth> represents the depth relative to project.godot; 0 means same
+      :         dir as it.
+    build (nim-option...) (<at=$PWD>) (--depth:<depth=1>)
       : Search bootstrap.nim from <at> to '/' and compile it.
-      : If project.godot is found before bootstrap.nim,
-      : build-all is called instead.
-    build-all (nim-option...) (<at=$PWD>) (--depth:<depth=int.high>)
-      : Search project.godot from <at> to '/' and compile all
-      : bootstrap.nim under it.
-      : This search for compile may recursive up to <depth>
+      : If project.godot is found instead of bootstrap.nim, build-all is called.
+      : <depth> is used for this compatible mode.
 
 Extention:
 
