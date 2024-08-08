@@ -2,35 +2,29 @@ import std/os
 import std/strformat
 
 const path = (
-  coronation: "https://github.com/godot-nim/coronation",
-  gdextcore: "https://github.com/godot-nim/gdextcore",
-  gdext: "https://github.com/godot-nim/gdextshell",
+  gdext: "https://github.com/godot-nim/gdext-nim",
 )
 
-proc uninstall*(): 0..1 =
-  ## Uninstall all dependencies that installed through gdextwiz.
-  execShellCmd &"""
-nimble uninstall -y coronation
-nimble uninstall -y gdext
-nimble uninstall -y gdextgen
-nimble uninstall -y gdextcore
-"""
+proc install*(): 0..1 =
+  ## Install all dependencies to develop Godot GDExtension
+  execShellCmd &"nimble install {path.gdext}"
 
-proc install*(godotbin: string = "godot"): 0..1 =
-  ## Install all dependencies to use godot.
-  execShellCmd &"""
-{godotbin} --dump-extension-api
-nimble install {path.coronation}
-coronation --apisource:extension_api.json --outdir:. --package:gdextgen --version-control:off
-nimble install {path.gdextcore}
-cd gdextgen && nimble install && cd -
-nimble install {path.gdext}
-rm -rf gdextgen extension_api.json
-"""
+proc uninstall*(self= false): 0..1 =
+  ## Uninstall all dependencies that installed through gdextwiz.
+  var pkglist = @["gdext", "gdextgen", "gdextcore"]
+  if self: pkglist.add ["gdextwiz"]
+
+  for pkg in pkglist:
+    while execShellCmd(&"nimble uninstall -y {pkg}") == 0: discard
+
+proc upgrade*(self= false): 0..1 =
+  ## uninstall current libraries and re-install it.
+  uninstall(self= self) and install()
 
 template HELP*(pro: proc): untyped =
   when pro == install: { }
-  elif pro == uninstall: { }
+  elif pro == uninstall: { "self": "includes gdextwiz itself"}
+  elif pro == upgrade: { "self": "includes gdextwiz itself"}
   else: { }
 
 

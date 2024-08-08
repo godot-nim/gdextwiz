@@ -39,5 +39,6 @@ Extention:
     ],
     [library.install, help= library.HELP install],
     [library.uninstall, help= library.HELP uninstall],
+    [library.upgrade, help= library.HELP upgrade],
     [workspace.new_workspace],
   )
