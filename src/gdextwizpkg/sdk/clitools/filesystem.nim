@@ -1,7 +1,8 @@
 import sdk/cli
-import sdk/cligentypes
 
 import std/[os, strutils, strformat]
+
+type Directory* = distinct string
 
 proc isSafeToEdit*(cli: var CliContext; dir: Directory; warnContents = false): bool =
   let dir = dir.string

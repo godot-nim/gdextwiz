@@ -1,8 +1,7 @@
 import sdk/cli
-import sdk/cligentypes
 import sdk/clitools/filesystem
 
-import std/[os]
+import std/[os, parseopt]
 
 const
   templateroot = "workspace/template"
@@ -11,7 +10,7 @@ const
   `bootstrapconf.nims` = staticRead templateroot/"bootstrapconf.nims"
   `config.nims` = staticRead templateroot/"config.nims"
 
-proc new_workspace*(name = default Directory) =
+proc new_workspace*(name = default Directory): 0..1 =
   var cli = CliContext(wizard: "wizard new-workspace*")
   cli.info "new-workspace is activated"
 
@@ -32,3 +31,20 @@ proc new_workspace*(name = default Directory) =
   writeFileWithDialog(workspace/"bootstrap.nim", `bootstrap.nim`)
 
   createDir workspace/"src"
+
+proc dispatch_new_workspace*(opt: var OptParser) =
+  while true:
+    case opt.kind
+    of cmdLongOption, cmdShortOption:
+      discard
+    of cmdArgument, cmdEnd:
+      break
+    next opt
+
+  case opt.kind
+  of cmdLongOption, cmdShortOption:
+    discard
+  of cmdArgument:
+    quit new_workspace(Directory opt.key)
+  of cmdEnd:
+    quit new_workspace()
